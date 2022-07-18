@@ -18,14 +18,14 @@ Citizen.CreateThread(function()
             if dist <= 5 then 
                 wait = 1                                                 
                 DrawMarker(6, v.x, v.y, v.z-0.99, nil, nil, nil, -90, nil, nil, 1.0, 1.0, 1.0, 230, 230, 0 , 120)
-             end
-            if dist <= 2 then
+            end
+            if dist <= 2.5 then
                 wait = 1
                 Visual.Subtitle("Appuyer sur ~y~[E]~s~ pour accèder à la ~y~location de véhicules ~s~!", 1) 
                 if IsControlJustPressed(1,51) then
                     OpenLocation()
                 end
-            end 
+            end
         end
     Citizen.Wait(wait)
     end
@@ -82,16 +82,15 @@ AddEventHandler("pLocation:spawnvehicule", function(SpawnZones, Models, Prix, He
             while not HasModelLoaded(model) do
                 Wait(10)
             end
-            local distanceFromPed = #(v.Position - GetEntityCoords(PlayerPedId()))
-            if distanceFromPed < 3 then
-                local vehiculelocation = CreateVehicle(model, SpawnZones.x, SpawnZones.y, SpawnZones.z, Headings, true, false)
-                SetVehicleNumberPlateText(vehiculelocation, "location"..math.random(50, 999))
-                SetVehicleFixed(vehiculelocation)
-                TaskWarpPedIntoVehicle(PlayerPedId(), vehiculelocation, -1)
-                SetVehRadioStation(vehiculelocation, 0)
 
-                TriggerEvent("esx:showNotification", "Vous avez louer un ~y~véhicule ~s~ pour ~y~" ..Prix.. "$~s~.")
-            end
+            local vehiculelocation = CreateVehicle(model, SpawnZones.x, SpawnZones.y, SpawnZones.z, Headings, true, false)
+            SetVehicleNumberPlateText(vehiculelocation, "location"..math.random(50, 999))
+            SetVehicleFixed(vehiculelocation)
+            TaskWarpPedIntoVehicle(PlayerPedId(), vehiculelocation, -1)
+            SetVehRadioStation(vehiculelocation, 0)
+            exports["LegacyFuel"]:SetFuel(vehicle, 100)
+
+            TriggerEvent("esx:showNotification", "Vous avez louer un ~y~véhicule ~s~ pour ~y~" ..Prix.. "$~s~.")
 
             RageUI.CloseAll()
         end
